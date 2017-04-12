@@ -1,0 +1,160 @@
+/* CSS Variable Declarations */
+
+:root {
+  --fb-blue: #3b5998;
+  --light-grey: #e7e7e7;
+  --border-radius: 1px;
+}
+
+
+/* General Bootstrap CSS overrides */
+
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar-header .navbar-brand {
+	color: var(--fb-blue);
+}
+
+.form-control {
+	border-radius: var(--border-radius);
+}
+
+.input-group-addon {
+	border-radius: var(--border-radius);
+	background-color: var(--fb-blue);
+	border-color:  var(--fb-blue);
+}
+
+
+/* Header */
+
+.navbar-center {
+	text-align: center;
+}
+
+.navbar-center .form-group {
+	margin-left: -114px;
+}
+
+#search-text-field {
+	width: 400px;
+}
+
+
+/* Buttons */
+
+#search-button {
+	background-color: var(--fb-blue);
+	border-radius: var(--border-radius);
+	width: 80px;
+}
+
+.glyphicon-search {
+	color: white;
+}
+
+#clear-button {
+	color: var(--fb-blue);
+	border-color:  var(--fb-blue);
+	border-radius: var(--border-radius);
+	margin-left: 20px;
+}
+
+
+/* Tabs */
+
+.tab-bar {
+	border: 0;
+	background-color: white;
+}
+
+.nav-tabs.nav-justified li a {
+	border-radius: 0;
+	border: 0;
+	border-bottom: 2px solid var(--fb-blue);
+	color: black;
+}
+
+.nav-tabs.nav-justified li.active a {
+	border: 0;
+	border-bottom: 2px solid var(--fb-blue);
+	color: white;
+	background-color: var(--fb-blue);
+}
+
+.nav-tabs.nav-justified li.active a:hover,  .nav-tabs.nav-justified li.active a:focus{
+	border: 0;
+	border-bottom: 2px solid var(--fb-blue);
+}
+
+
+/* Panel animation */
+
+.details-panel {
+	transition: all ease-in-out 0.5s;
+	left: 0;
+	position: relative;
+}
+
+.details-panel.ng-hide {
+	transform: translateX(-100%);
+}
+
+
+/* Table */
+
+.container {
+	padding: 20px;
+}
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+
+
+/* Images */
+
+img {
+	height: 40px;
+	width: 40px;
+}
+
+
+/* Pagination */
+
+.pagination-container {
+	text-align: center;
+}
+
+.pagination-container > button {
+	display: inline;
+	width: 100px;
+	margin: 0px 10px;
+}
+
+.btn-secondary {
+	background-color: white;
+	border: 2px solid lightgray;
+}
+
+/* Details panel */
+
+.albums-posts {
+	margin-top: 25px;
+}
+
+.albums-posts > .panel {
+	float: left;
+	width: calc(50% - 10px);
+}
+
+.albums-panel {
+	margin-right: 5px;
+}
+
+.posts-panel {
+	margin-left: 5px;
+}
+
