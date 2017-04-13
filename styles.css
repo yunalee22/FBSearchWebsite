@@ -93,7 +93,7 @@
 /* Panel animation */
 
 .details-panel {
-	transition: all ease-in-out 0.5s;
+	transition: all ease-in-out 0.3s;
 	left: 0;
 	position: relative;
 }

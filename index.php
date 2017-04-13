@@ -9,24 +9,17 @@
 	if (isset($_GET["action"]) && !empty($_GET["action"])) {
 		$action = $_GET["action"];
 		switch ($action) {
-
-			case "search": {
-				search($_GET["search"]);
+			case "search":
+				search($_GET["search"], $_GET["latitude"], $_GET["longitude"]);
 				break;
-			}
-
-			case "loadPage": {
+			case "loadPage":
 				loadPage($_GET["url"]);
 				break;
-			}
+			default: exit;
 		}
 	}
 
-	function search($search) {
-
-		// Get latitude and longitude
-		$latitude = 0;
-		$longitude = 0;
+	function search($search, $latitude, $longitude) {
 
 		// Facebook API access token
 		$access_token = "EAARJFZBoE6F8BAFMParl2XT9t8OoGIK3lHVNzVOT8yF5Gr5QuI3ZBPZCUgK2KgJJ3ZCdVsmqqIlY8iBZAhMqcMO7gxwkr9mZCcj64RUbQf17Go3mEEV3iqCJZCK4p4RYV4YbKfZCjZBlMk2bhOdownWc8dVZCviM7Qz7UZD";
@@ -51,15 +44,14 @@
 	}
 
 	function loadPage($url) {
-
 		// Facebook API access token
 		$access_token = "EAARJFZBoE6F8BAFMParl2XT9t8OoGIK3lHVNzVOT8yF5Gr5QuI3ZBPZCUgK2KgJJ3ZCdVsmqqIlY8iBZAhMqcMO7gxwkr9mZCcj64RUbQf17Go3mEEV3iqCJZCK4p4RYV4YbKfZCjZBlMk2bhOdownWc8dVZCviM7Qz7UZD";
 
 		// Send HTML request
-		$data = file_get_contents($url);
+		$page_data = file_get_contents($url);
 
 		// Send content back to application
-		echo $data;
+		echo $page_data;
 	}
 
 ?>

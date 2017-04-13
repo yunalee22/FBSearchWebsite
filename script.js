@@ -4,13 +4,13 @@ var app = angular.module("fbSearchApp", ["ngAnimate"]);
 // Set up controller
 app.controller('fbSearchCtrl', ['$scope', function($scope) {
 
-	// Initialize variables
-	$scope.users_data = null;	$scope.users_paging = null;		$scope.users_details = false;
-	$scope.pages_data = null;	$scope.pages_paging = null;		$scope.pages_details = false;
-	$scope.events_data = null;	$scope.events_paging = null;	$scope.events_details = false;
-	$scope.places_data = null;	$scope.places_paging = null;	$scope.places_details = false;
-	$scope.groups_data = null;	$scope.groups_paging = null;	$scope.groups_details = false;
-
+	$scope.data = {
+		users: { data: null, paging: null, details: false },
+		pages: { data: null, paging: null, details: false },
+		events: { data: null, paging: null, details: false },
+		places: { data: null, paging: null, details: false },
+		groups: { data: null, paging: null, details: false }
+	};
 
 	// On search button click
 	$scope.search = function() {
@@ -23,34 +23,58 @@ app.controller('fbSearchCtrl', ['$scope', function($scope) {
 		}
 		console.log("Search query for: " + search);
 
+		// Get user's current location
+		var latitude = 0, longitude = 0;
+		navigator.geolocation.getCurrentPosition(
+			function(pos) {		// On success
+				var crd = pos.coords;
+				latitude = crd.latitude;
+				longitude = crd.longitude;
+			},
+			function() {		// On error
+				alert("User's location could not be detected.");
+				return;
+			},
+			{	// Options
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			}
+		);
+
 		// Make HTTP request to Facebook API
 	    $.ajax({
 	    	type: 'GET',
-	    	url: "http://localhost/index.php",
+	    	url: "http://localhost/FBSearch/index.php",
 	    	// url: "http://fbsearch-hw8.us-west-2.elasticbeanstalk.com/",
 	    	crossDomain: true,
-	    	contentType: 'text',
+	    	contentType: 'application/json',
 	    	xhrFields: { withCredentials: false },
-	    	data: {action: "search", search: search},
+	    	data: {action: "search", search: search, latitude: latitude, longitude: longitude},
 	    	
 	    	success: function(response, status, xhr) {
 	    		// Parse the JSON response
-	    		var data = JSON.parse(response);
-	    		var users = JSON.parse(data["users"]);
-	    		var pages = JSON.parse(data["pages"]);
-	    		var events = JSON.parse(data["events"]);
-	    		var places = JSON.parse(data["places"]);
-	    		var groups = JSON.parse(data["groups"]);
+	    		response = JSON.parse(response);
+	    		var users = JSON.parse(response["users"]);
+	    		var pages = JSON.parse(response["pages"]);
+	    		var events = JSON.parse(response["events"]);
+	    		var places = JSON.parse(response["places"]);
+	    		var groups = JSON.parse(response["groups"]);
+
+	    		var data = {
+	    			users: { data: users["data"], paging: users["paging"] },
+	    			pages: { data: pages["data"], paging: pages["paging"] },
+	    			events: { data: events["data"], paging: events["paging"] },
+	    			places: { data: places["data"], paging: places["paging"] },
+	    			groups: { data: groups["data"], paging: groups["paging"] }
+	    		};
 
 	    		$scope.$apply(function() {
-
-	    			// Update users panel
-	    			$scope.users_data = users["data"];
-	    			$scope.users_paging = users["paging"];
-
-	    			// Update pages panel
-	    			$scope.pages_data = pages["data"];
-	    			$scope.pages_paging = pages["paging"];
+	    			// Update panels
+	    			for (var key in $scope.data) {
+	    				$scope.data[key]["data"] = data[key]["data"];
+	    				$scope.data[key]["paging"] = data[key]["paging"];
+	    			}
 	    		});
 	    	},
 	    	error: function(xhr, status, error) {
@@ -64,22 +88,15 @@ app.controller('fbSearchCtrl', ['$scope', function($scope) {
 	$scope.turnPage = function(panel, direction) {
 
 		console.log("Turning to " + direction + " for panel " + panel);
-		var url;
-		switch (panel) {
-			case "users": url = $scope.users_paging[direction]; break;
-			case "pages": url = $scope.pages_paging[direction]; break;
-			case "events": url = $scope.events_paging[direction]; break;
-			case "places": url = $scope.places_paging[direction]; break;
-			case "groups": url = $scope.groups_paging[direction]; break;
-			default: return;
-		}
+		var url = $scope.data[panel]["paging"][direction];
+		console.log("Page url: " + url);
 
 		$.ajax({
 			type: 'GET',
-			url: "http://localhost/index.php",
+			url: "http://localhost/FBSearch/index.php",
 			// url: "http://fbsearch-hw8.us-west-2.elasticbeanstalk.com/",
 	    	crossDomain: true,
-	    	contentType: 'text',
+	    	contentType: 'application/json',
 	    	xhrFields: { withCredentials: false },
 	    	data: {action: "loadPage", url: url},
 	    	
@@ -87,30 +104,8 @@ app.controller('fbSearchCtrl', ['$scope', function($scope) {
 	    		var data = JSON.parse(response);
 	    		$scope.$apply(function() {
 	    			// Update specified panel
-	    			switch (panel) {
-	    				case "users":
-	    					$scope.users_data = data["data"];
-	    					$scope.users_paging = data["paging"];
-	    					break;
-	    				case "pages":
-	    					$scope.pages_data = data["data"];
-	    					$scope.pages_paging = data["paging"];
-	    					break;
-	    				case "events":
-	    					$scope.events_data = data["data"];
-	    					$scope.events_paging = data["paging"];
-	    					break;
-	    				case "places":
-	    					$scope.places_data = data["data"];
-	    					$scope.places_paging = data["paging"];
-	    					break;
-	    				case "groups":
-	    					$scope.groups_data = data["data"];
-	    					$scope.groups_paging = data["paging"];
-	    					break;
-	    				default: break;
-	    			}
-	    			
+	    			$scope.data[panel]["data"] = data["data"];
+	    			$scope.data[panel]["paging"] = data["paging"];
 	    		});
 	    	},
 	    	error: function(xhr, status, error) {
@@ -122,21 +117,12 @@ app.controller('fbSearchCtrl', ['$scope', function($scope) {
 
 	// On details button click
 	$scope.showDetails = function(panel, id) {
-
-		switch (panel) {
-			case "users": $scope.users_details = true; break;
-			case "pages": $scope.pages_details = true; break;
-			case "events": $scope.events_details = true; break;
-			case "places": $scope.places_details = true; break;
-			case "groups": $scope.groups_details = true; break;
-			default: return;
-		}
-
+		$scope.data[panel]["details"] = true;
 		console.log("Loading details for panel: " + panel + " and id: " + id);
 	};
 
 	// On details back button click
 	$scope.hideDetails = function(panel) {
-		$scope.users_details = false;
+		$scope.data[panel]["details"] = false;
 	}
 }]);

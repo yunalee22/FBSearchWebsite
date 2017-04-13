@@ -63,10 +63,10 @@
 
             <!-- Users panel -->
             <div role="tabpanel" class="tab-pane active" id="users">
-                <div class="container" ng-show="users_data != null">
+                <div class="container" ng-show="data['users']['data'] != null">
 
                     <!-- Data panel -->
-                    <div ng-show="users_details === false">
+                    <div ng-show="data['users']['details'] === false">
                         <!-- Table -->
                         <table class="table">
                             <tr>
@@ -76,7 +76,7 @@
                                 <th>Favorite</th>
                                 <th>Details</th>
                             </tr>
-                            <tr ng-repeat="u in users_data">
+                            <tr ng-repeat="u in data['users']['data']">
                                 <td>{{$index + 1}}</td>
                                 <td><img class="img-circle" ng-src="{{u.picture.data.url}}"></td>
                                 <td>{{u.name}}</td>
@@ -86,13 +86,13 @@
                         </table>
                         <!-- Pagination -->
                         <div class="pagination-container">
-                            <button class="btn btn-secondary" ng-show="users_paging.hasOwnProperty('previous')" ng-click="turnPage('users', 'previous')">Previous</button>
-                            <button class="btn btn-secondary" ng-show="users_paging.hasOwnProperty('next')" ng-click="turnPage('users', 'next')">Next</button>
+                            <button class="btn btn-secondary" ng-show="data['users']['paging'].hasOwnProperty('previous')" ng-click="turnPage('users', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" ng-show="data['users']['paging'].hasOwnProperty('next')" ng-click="turnPage('users', 'next')">Next</button>
                         </div>
                     </div>
 
                     <!-- Details panel -->
-                    <div class="details-panel" ng-show="users_details === true">
+                    <div class="details-panel" ng-show="data['users']['details'] === true">
                         <button class="btn btn-secondary" ng-click="hideDetails('users')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
                         <div class="albums-posts">
                             <!-- Albums -->
@@ -112,10 +112,10 @@
 
             <!-- Pages panel -->
             <div role="tabpanel" class="tab-pane" id="pages">
-                <div class="container" ng-show="pages_data != null">
+                <div class="container" ng-show="data['pages']['data'] != null">
 
                     <!-- Data panel -->
-                    <div ng-show="pages_details === false">
+                    <div ng-show="data['pages']['details'] === false">
                         <!-- Table -->
                         <table class="table">
                             <tr>
@@ -125,24 +125,24 @@
                                 <th>Favorite</th>
                                 <th>Details</th>
                             </tr>
-                            <tr ng-repeat="u in users_data">
+                            <tr ng-repeat="p in data['pages']['data']">
                                 <td>{{$index + 1}}</td>
-                                <td><img class="img-circle" ng-src="{{u.picture.data.url}}"></td>
-                                <td>{{u.name}}</td>
+                                <td><img class="img-circle" ng-src="{{p.picture.data.url}}"></td>
+                                <td>{{p.name}}</td>
                                 <td><button class="btn btn-default"><span class="glyphicon glyphicon-star-empty"></span></button></td>
-                                <td><button class="btn btn-default" ng-click="showDetails('users', u.id)"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                                <td><button class="btn btn-default" ng-click="showDetails('pages', p.id)"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
                             </tr>
                         </table>
                         <!-- Pagination -->
                         <div class="pagination-container">
-                            <button class="btn btn-secondary" ng-show="users_paging.hasOwnProperty('previous')" ng-click="turnPage('users', 'previous')">Previous</button>
-                            <button class="btn btn-secondary" ng-show="users_paging.hasOwnProperty('next')" ng-click="turnPage('users', 'next')">Next</button>
+                            <button class="btn btn-secondary" ng-show="data['pages']['paging'].hasOwnProperty('previous')" ng-click="turnPage('pages', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" ng-show="data['pages']['paging'].hasOwnProperty('next')" ng-click="turnPage('pages', 'next')">Next</button>
                         </div>
                     </div>
 
                     <!-- Details panel -->
-                    <div class="details-panel" ng-show="users_details === true">
-                        <button class="btn btn-secondary" ng-click="hideDetails('users')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
+                    <div class="details-panel" ng-show="data['pages']['details'] === true">
+                        <button class="btn btn-secondary" ng-click="hideDetails('pages')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
                         <div class="albums-posts">
                             <!-- Albums -->
                             <div class="panel panel-default albums-panel">
@@ -161,17 +161,149 @@
 
             <!-- Events panel -->
             <div role="tabpanel" class="tab-pane" id="events">
-                Events
+                <div class="container" ng-show="data['events']['data'] != null">
+
+                    <!-- Data panel -->
+                    <div ng-show="data['events']['details'] === false">
+                        <!-- Table -->
+                        <table class="table">
+                            <tr>
+                                <th>#</th>
+                                <th>Profile Photo</th>
+                                <th>Name</th>
+                                <th>Favorite</th>
+                                <th>Details</th>
+                            </tr>
+                            <tr ng-repeat="e in data['events']['data']">
+                                <td>{{$index + 1}}</td>
+                                <td><img class="img-circle" ng-src="{{e.picture.data.url}}"></td>
+                                <td>{{e.name}}</td>
+                                <td><button class="btn btn-default"><span class="glyphicon glyphicon-star-empty"></span></button></td>
+                                <td><button class="btn btn-default" ng-click="showDetails('events', e.id)"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                            </tr>
+                        </table>
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <button class="btn btn-secondary" ng-show="data['events']['paging'].hasOwnProperty('previous')" ng-click="turnPage('events', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" ng-show="data['events']['paging'].hasOwnProperty('next')" ng-click="turnPage('events', 'next')">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Details panel -->
+                    <div class="details-panel" ng-show="data['events']['details'] === true">
+                        <button class="btn btn-secondary" ng-click="hideDetails('events')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
+                        <div class="albums-posts">
+                            <!-- Albums -->
+                            <div class="panel panel-default albums-panel">
+                                <div class="panel-heading">Albums</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                            <!-- Posts -->
+                            <div class="panel panel-default posts-panel">
+                                <div class="panel-heading">Posts</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Places panel -->
             <div role="tabpanel" class="tab-pane" id="places">
-                Places
+                <div class="container" ng-show="data['places']['data'] != null">
+
+                    <!-- Data panel -->
+                    <div ng-show="data['places']['details'] === false">
+                        <!-- Table -->
+                        <table class="table">
+                            <tr>
+                                <th>#</th>
+                                <th>Profile Photo</th>
+                                <th>Name</th>
+                                <th>Favorite</th>
+                                <th>Details</th>
+                            </tr>
+                            <tr ng-repeat="p in data['places']['data']">
+                                <td>{{$index + 1}}</td>
+                                <td><img class="img-circle" ng-src="{{p.picture.data.url}}"></td>
+                                <td>{{p.name}}</td>
+                                <td><button class="btn btn-default"><span class="glyphicon glyphicon-star-empty"></span></button></td>
+                                <td><button class="btn btn-default" ng-click="showDetails('places', p.id)"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                            </tr>
+                        </table>
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <button class="btn btn-secondary" ng-show="data['places']['paging'].hasOwnProperty('previous')" ng-click="turnPage('places', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" ng-show="data['places']['paging'].hasOwnProperty('next')" ng-click="turnPage('places', 'next')">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Details panel -->
+                    <div class="details-panel" ng-show="data['places']['details'] === true">
+                        <button class="btn btn-secondary" ng-click="hideDetails('places')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
+                        <div class="albums-posts">
+                            <!-- Albums -->
+                            <div class="panel panel-default albums-panel">
+                                <div class="panel-heading">Albums</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                            <!-- Posts -->
+                            <div class="panel panel-default posts-panel">
+                                <div class="panel-heading">Posts</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Groups panel -->
             <div role="tabpanel" class="tab-pane" id="groups">
-                Groups
+                <div class="container" ng-show="data['groups']['data'] != null">
+
+                    <!-- Data panel -->
+                    <div ng-show="data['groups']['details'] === false">
+                        <!-- Table -->
+                        <table class="table">
+                            <tr>
+                                <th>#</th>
+                                <th>Profile Photo</th>
+                                <th>Name</th>
+                                <th>Favorite</th>
+                                <th>Details</th>
+                            </tr>
+                            <tr ng-repeat="g in data['groups']['data']">
+                                <td>{{$index + 1}}</td>
+                                <td><img class="img-circle" ng-src="{{g.picture.data.url}}"></td>
+                                <td>{{g.name}}</td>
+                                <td><button class="btn btn-default"><span class="glyphicon glyphicon-star-empty"></span></button></td>
+                                <td><button class="btn btn-default" ng-click="showDetails('groups', g.id)"><span class="glyphicon glyphicon-chevron-right"></span></button></td>
+                            </tr>
+                        </table>
+                        <!-- Pagination -->
+                        <div class="pagination-container">
+                            <button class="btn btn-secondary" ng-show="data['groups']['paging'].hasOwnProperty('previous')" ng-click="turnPage('groups', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" ng-show="data['groups']['paging'].hasOwnProperty('next')" ng-click="turnPage('groups', 'next')">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Details panel -->
+                    <div class="details-panel" ng-show="data['groups']['details'] === true">
+                        <button class="btn btn-secondary" ng-click="hideDetails('groups')"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
+                        <div class="albums-posts">
+                            <!-- Albums -->
+                            <div class="panel panel-default albums-panel">
+                                <div class="panel-heading">Albums</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                            <!-- Posts -->
+                            <div class="panel panel-default posts-panel">
+                                <div class="panel-heading">Posts</div>
+                                <div class="panel-body">Put stuff here later</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Favorites panel -->
