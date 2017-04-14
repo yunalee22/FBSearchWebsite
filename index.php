@@ -5,6 +5,8 @@
 	header("Access-Control-Allow-Methods: OPTIONS, GET, POST");
 	header("Access-Control-Allow-Headers: X-Requested-With, content-type, access-control-allow-origin, access-control-allow-methods, access-control-allow-headers");
 
+	error_reporting(E_ERROR | E_PARSE);
+
 	// Determine requested action
 	if (isset($_GET["action"]) && !empty($_GET["action"])) {
 		$action = $_GET["action"];
@@ -15,14 +17,16 @@
 			case "loadPage":
 				loadPage($_GET["url"]);
 				break;
+			case "loadDetails":
+				loadDetails($_GET["id"]);
+				break;
 			default: exit;
 		}
 	}
 
 	function search($search, $latitude, $longitude) {
-
 		// Facebook API access token
-		$access_token = "EAARJFZBoE6F8BAFMParl2XT9t8OoGIK3lHVNzVOT8yF5Gr5QuI3ZBPZCUgK2KgJJ3ZCdVsmqqIlY8iBZAhMqcMO7gxwkr9mZCcj64RUbQf17Go3mEEV3iqCJZCK4p4RYV4YbKfZCjZBlMk2bhOdownWc8dVZCviM7Qz7UZD";
+		$access_token = "EAASUD5YjcQ4BABS1vQJtpi04oPj1eMsRhsKOLEGnQ5ObPW51biTD5tyyuT9HrVf1Uvoxu07p5r1juVUp8nH7hq959w0C0RDZAYXGVYLFescycfCFavprCgz7oUnBDUndqzz2R2grya20YxutZB";
 
 		// Construct queries
 		$search = urlencode($search);
@@ -45,13 +49,58 @@
 
 	function loadPage($url) {
 		// Facebook API access token
-		$access_token = "EAARJFZBoE6F8BAFMParl2XT9t8OoGIK3lHVNzVOT8yF5Gr5QuI3ZBPZCUgK2KgJJ3ZCdVsmqqIlY8iBZAhMqcMO7gxwkr9mZCcj64RUbQf17Go3mEEV3iqCJZCK4p4RYV4YbKfZCjZBlMk2bhOdownWc8dVZCviM7Qz7UZD";
+		$access_token = "EAASUD5YjcQ4BABS1vQJtpi04oPj1eMsRhsKOLEGnQ5ObPW51biTD5tyyuT9HrVf1Uvoxu07p5r1juVUp8nH7hq959w0C0RDZAYXGVYLFescycfCFavprCgz7oUnBDUndqzz2R2grya20YxutZB";
 
 		// Send HTML request
-		$page_data = file_get_contents($url);
+		$data = file_get_contents($url);
 
 		// Send content back to application
-		echo $page_data;
+		echo $data;
+	}
+
+	function loadDetails($id) {
+		// Facebook API access token
+		$access_token = "EAASUD5YjcQ4BABS1vQJtpi04oPj1eMsRhsKOLEGnQ5ObPW51biTD5tyyuT9HrVf1Uvoxu07p5r1juVUp8nH7hq959w0C0RDZAYXGVYLFescycfCFavprCgz7oUnBDUndqzz2R2grya20YxutZB";
+
+		// Get albums and posts
+		$query = "https://graph.facebook.com/v2.8/" . $id . "?fields=albums.limit(5){name,photos.limit(2){name,picture}},posts.limit(5)&access_token=" . $access_token;
+		$response = json_decode(file_get_contents($query), true);
+
+		$data["albums"] = array();
+		$data["posts"] = array();
+		if ($response === false) {
+			echo json_encode($data);
+			exit;
+		}
+
+		// Get album photos
+		if (array_key_exists("albums", $response)) {
+			$albums = $response["albums"]["data"];
+			foreach ($albums as $album) {
+				$a["name"] = $album["name"];
+				$a["photos"] = array();
+				foreach ($album["photos"]["data"] as $photo) {
+					$query = "https://graph.facebook.com/v2.8/" . $photo["id"] . "/picture?redirect=false&access_token=" . $access_token;
+					$album_response = json_decode(file_get_contents($query), true);
+					$img_url = $album_response["data"]["url"];
+					array_push($a["photos"], $img_url);
+				}
+				array_push($data["albums"], $a);
+			}
+		}
+		
+		// Get post messages
+		if (array_key_exists("posts", $response)) {
+			$posts = $response["posts"]["data"];
+			foreach ($posts as $post) {
+				$p["message"] = $post["message"];
+				$p["created_time"] = $post["created_time"];
+				array_push($data["posts"], $p);
+			}
+		}
+		
+		// Send content back to application
+		echo json_encode($data);
 	}
 
 ?>

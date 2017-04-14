@@ -63,6 +63,12 @@
 }
 
 
+/* Progress bar */
+#tab-progress-bar {
+	margin-top: 200px;
+}
+
+
 /* Tabs */
 
 .tab-bar {
@@ -89,6 +95,10 @@
 	border-bottom: 2px solid var(--fb-blue);
 }
 
+.capitalize {
+	text-transform: capitalize;
+}
+
 
 /* Panel animation */
 
@@ -113,10 +123,7 @@
      vertical-align: middle;
 }
 
-
-/* Images */
-
-img {
+.profile-photo {
 	height: 40px;
 	width: 40px;
 }
@@ -139,14 +146,25 @@ img {
 	border: 2px solid lightgray;
 }
 
-/* Details panel */
+
+/* Details buttons */
+
+.buttons-right {
+	float: right;
+}
+
+.buttons-right img {
+	height: 20px;
+}
+
+
+/* Albums */
 
 .albums-posts {
 	margin-top: 25px;
 }
 
 .albums-posts > .panel {
-	float: left;
 	width: calc(50% - 10px);
 }
 
@@ -154,7 +172,49 @@ img {
 	margin-right: 5px;
 }
 
+.album-images {
+	text-align: center;
+}
+
+.album-images > .panel-body > img {
+	width: 95%;
+	display: block;
+	margin: 10px auto;
+}
+
+.panel-heading a:hover {
+	color: var(--fb-blue);
+}
+
+.panel-heading a:active {
+	color: var(--fb-blue);
+}
+
+
+/* Posts */
+
 .posts-panel {
 	margin-left: 5px;
+}
+
+.post-panel {
+	padding: 13px;
+}
+
+.post-header {
+	margin-bottom: 20px;
+	font-size: 90%;
+}
+
+.post-header .profile-photo {
+	margin-right: 20px;
+}
+
+.post-header .name {
+	font-weight: bold;
+}
+
+.post-header .date {
+	color: var(--light-grey);
 }
 
